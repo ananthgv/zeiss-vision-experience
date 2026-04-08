@@ -142,12 +142,12 @@ export default function App() {
   const estimatedPrice = Math.floor(baseLensValue + selectedCoating.price).toLocaleString();
 
   const allFrames = [
-    { id: 1, name: "Minimalist Titanium", brand: "LINDBERG", type: "Rimless", fitMatch: "99.8%", price: 450, image: "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=400&q=80" },
-    { id: 2, name: "Classic Acetate", brand: "Moscot", type: "Full Rim", fitMatch: "96.5%", price: 320, image: "https://dayalopticalsindia.com/cdn/shop/files/Moscot_Frankle_Dark_Green.........webp?v=1761812991" },
-    { id: 3, name: "Aerospace Alloy", brand: "Mykita", type: "Half Rim", fitMatch: "98.2%", price: 550, image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/1080x1080/9df78eab33525d08d6e5fb8d27136e95//v/i/Vincent-Chase-VC-E14440-C1-Eyeglasses_J_1616.jpg" },
-    { id: 4, name: "Vintage Tortoise", brand: "Oliver Peoples", type: "Full Rim", fitMatch: "97.1%", price: 380, image: "https://cdn.fynd.com/v2/falling-surf-7c8bb8/fyprod/wrkr/products/pictures/item/free/original/000000000493669803/zBT6jgcid7R-0OV5598SU__1731P1__P21__shad__qt.png" },
-    { id: 5, name: "Premiere Signature", brand: "Cartier", type: "Rimless", fitMatch: "99.1%", price: 1200, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5M84lkh_3yE9UqacW2SWE8yMT-zzl5MvYqw&s" },
-    { id: 6, name: "Bold Square", brand: "Tom Ford", type: "Full Rim", fitMatch: "95.4%", price: 490, image: "https://www.rkumar.in/cdn/shop/files/FT6076-B_001_01_ef60de12-098b-43e3-9590-fb6cf8fa57af.jpg?v=1772851360" }
+    { id: 1, name: "Minimalist Titanium", brand: "LINDBERG", type: "Rimless", stock: "In Store", price: 450, image: "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=400&q=80" },
+    { id: 2, name: "Classic Acetate", brand: "Moscot", type: "Full Rim", stock: "In Store", price: 320, image: "https://dayalopticalsindia.com/cdn/shop/files/Moscot_Frankle_Dark_Green.........webp?v=1761812991" },
+    { id: 3, name: "Aerospace Alloy", brand: "Mykita", type: "Half Rim", stock: "Order from HQ", price: 550, image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/1080x1080/9df78eab33525d08d6e5fb8d27136e95//v/i/Vincent-Chase-VC-E14440-C1-Eyeglasses_J_1616.jpg" },
+    { id: 4, name: "Vintage Tortoise", brand: "Oliver Peoples", type: "Full Rim", stock: "In Store", price: 380, image: "https://cdn.fynd.com/v2/falling-surf-7c8bb8/fyprod/wrkr/products/pictures/item/free/original/000000000493669803/zBT6jgcid7R-0OV5598SU__1731P1__P21__shad__qt.png" },
+    { id: 5, name: "Premiere Signature", brand: "Cartier", type: "Rimless", stock: "Order from HQ", price: 1200, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5M84lkh_3yE9UqacW2SWE8yMT-zzl5MvYqw&s" },
+    { id: 6, name: "Bold Square", brand: "Tom Ford", type: "Full Rim", stock: "In Store", price: 490, image: "https://www.rkumar.in/cdn/shop/files/FT6076-B_001_01_ef60de12-098b-43e3-9590-fb6cf8fa57af.jpg?v=1772851360" }
   ];
 
   const filteredFrames = allFrames.filter(f =>
@@ -455,7 +455,7 @@ export default function App() {
                   return (
                     <div key={frame.id} onClick={() => toggleFrameSelection(frame)} className={`cursor-pointer p-6 rounded-[2rem] border-2 transition-all duration-300 relative group flex flex-col justify-between ${isSelected ? 'border-blue-600 bg-white ring-8 ring-blue-50' : 'border-gray-100 bg-white hover:border-gray-200 shadow-sm'}`}>
                       <div>
-                        <div className="flex justify-between items-start mb-4"><div className="text-[9px] font-bold text-green-700 bg-green-50 px-2.5 py-1.5 rounded-lg uppercase tracking-widest">{frame.fitMatch} Fit</div><div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${isSelected ? 'bg-blue-600 border-blue-600 text-white shadow-md' : 'border-gray-200'}`}>{isSelected && <CheckCircleIcon className="w-4 h-4 text-white mb-0" />}</div></div>
+                        <div className="flex justify-between items-start mb-4"><div className={`text-[9px] font-bold px-2.5 py-1.5 rounded-lg uppercase tracking-widest ${frame.stock === 'In Store' ? 'text-green-700 bg-green-50' : 'text-amber-700 bg-amber-50'}`}>{frame.stock}</div><div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${isSelected ? 'bg-blue-600 border-blue-600 text-white shadow-md' : 'border-gray-200'}`}>{isSelected && <CheckCircleIcon className="w-4 h-4 text-white mb-0" />}</div></div>
                         <div className="w-full aspect-[4/3] mb-6 overflow-hidden rounded-2xl bg-gray-50 p-2 flex items-center justify-center"><img src={frame.image} alt={frame.name} className="w-full h-full object-contain group-hover:scale-105 transition-transform" /></div>
                         <h3 className="font-bold text-gray-900 text-base">{frame.brand}</h3><p className="text-xs text-gray-400 font-medium mb-8 uppercase tracking-widest">{frame.name}</p>
                       </div>
