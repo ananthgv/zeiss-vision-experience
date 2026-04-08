@@ -78,6 +78,15 @@ export default function App() {
   const [frameTypeFilter, setFrameTypeFilter] = useState('All');
   const [brandFilter, setBrandFilter] = useState('All');
   const [orderStatus, setOrderStatus] = useState('idle'); // idle, processing, success
+  const [analyzing, setAnalyzing] = useState(false);
+
+  const handleAnalyze = () => {
+    setAnalyzing(true);
+    setTimeout(() => {
+      setAnalyzing(false);
+      handleNext();
+    }, 3000);
+  };
 
   const handleOrder = (destination) => {
     setOrderStatus('processing');
@@ -228,7 +237,14 @@ export default function App() {
                     />
                   </div>
                   <h2 className="text-3xl font-light text-gray-900 mb-3">Refraction Measurement</h2>
-                  <p className="text-gray-500 mb-10 max-w-md">Walk to the <strong>ZEISS VISUCORE 500</strong>. Rest your chin and look straight into the target.</p>
+                  <p className="text-gray-500 mb-6 max-w-md">Walk to the <strong>ZEISS VISUCORE 500</strong>. Rest your chin and look straight into the target.</p>
+                  
+                  <div className="bg-blue-50/50 border border-blue-100 rounded-2xl p-6 mb-8 max-w-xl text-left shadow-sm flex gap-4 items-start">
+                    <SparkleIcon className="flex-shrink-0 w-5 h-5 mt-0.5 text-blue-600" />
+                    <p className="text-sm text-blue-900 leading-relaxed">
+                      The ZEISS VISUCORE 500 is an all-in-one eye exam machine that combines both automated measurements and the "which lens is better, 1 or 2?" test into a single, compact unit. It allows a complete, high-precision prescription to be finished in under five minutes, using smart mirrors to simulate a 5-meter room in a space no larger than a small desk.
+                    </p>
+                  </div>
                   <button onClick={startVisucoreScan} className="bg-blue-600 text-white px-10 py-4 rounded-full font-semibold text-sm shadow-lg hover:scale-105 transition-all">Start Scan</button>
                 </div>
               ) : (
@@ -246,9 +262,20 @@ export default function App() {
                     ) : (
                       <div className="w-full animate-pop-in">
                         <div className="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
-                          <h2 className="text-xl font-bold">Subjective Refraction Data</h2>
+                          <h2 className="text-xl font-bold">Refraction Results</h2>
                           <div className="bg-green-50 text-green-700 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider border border-green-100">Data Secured</div>
                         </div>
+
+                        <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Objective Refraction <span className="text-gray-300 normal-case">(Autorefraction)</span></h3>
+                        <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100 shadow-inner mb-6">
+                          <div className="grid grid-cols-[40px_1fr_1fr_1fr] gap-x-2 gap-y-4 text-center items-center text-sm font-medium">
+                            <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Eye</div><div className="text-[10px] text-gray-400 font-bold uppercase">Sph</div><div className="text-[10px] text-gray-400 font-bold uppercase">Cyl</div><div className="text-[10px] text-gray-400 font-bold uppercase">Axis</div>
+                            <div className="font-bold text-gray-900 bg-white rounded shadow-sm py-1">R</div><div className="bg-white py-2 rounded shadow-sm">+0.25</div><div className="bg-white py-2 rounded shadow-sm">-0.75</div><div className="bg-white py-2 rounded shadow-sm">42°</div>
+                            <div className="font-bold text-gray-900 bg-white rounded shadow-sm py-1">L</div><div className="bg-white py-2 rounded shadow-sm">+0.25</div><div className="bg-white py-2 rounded shadow-sm">-0.50</div><div className="bg-white py-2 rounded shadow-sm">110°</div>
+                          </div>
+                        </div>
+
+                        <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Subjective Refraction <span className="text-gray-300 normal-case">(Fine-tuned "1 or 2?" test)</span></h3>
                         <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100 shadow-inner mb-6">
                           <div className="grid grid-cols-[40px_1fr_1fr_1fr_1fr_1fr] gap-x-2 gap-y-4 text-center items-center text-sm font-medium">
                             <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Eye</div><div className="text-[10px] text-gray-400 font-bold uppercase">Sph</div><div className="text-[10px] text-gray-400 font-bold uppercase">Cyl</div><div className="text-[10px] text-gray-400 font-bold uppercase">Axis</div><div className="text-[10px] text-gray-400 font-bold uppercase">Add</div><div className="text-[10px] text-gray-400 font-bold uppercase">VA</div>
@@ -256,7 +283,7 @@ export default function App() {
                             <div className="font-bold text-gray-900 bg-white rounded shadow-sm py-1">L</div><div className="bg-white py-2 rounded shadow-sm">+0.00</div><div className="bg-white py-2 rounded shadow-sm">-0.25</div><div className="bg-white py-2 rounded shadow-sm">113°</div><div className="bg-white py-2 rounded shadow-sm text-blue-600 font-bold">+1.00</div><div className="bg-white py-2 rounded shadow-sm">1.0</div>
                           </div>
                         </div>
-                        <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100 text-sm text-gray-700 leading-relaxed"><strong className="text-blue-900">Summary:</strong> Your eyes have a standard profile. Astigmatism and close-up requirements are normal; this data optimizes your lens curve for relaxed vision.</div>
+                        <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100 text-sm text-gray-700 leading-relaxed"><strong className="text-blue-900">Summary:</strong> Objective autorefraction provided the baseline, which was then refined through subjective testing. Your eyes have a standard profile with minor astigmatism. The Add power of +1.00 confirms early presbyopia support is needed for comfortable near vision.</div>
                       </div>
                     )}
                   </div>
@@ -325,7 +352,8 @@ export default function App() {
           {/* STEP 3: Lifestyle & Coating */}
           {step === 3 && (
             <div className="animate-fade-in w-full max-w-4xl mx-auto">
-              <h1 className="text-3xl font-light tracking-tight text-center mb-8">Personalize Your Solution</h1>
+              <h1 className="text-3xl font-light tracking-tight text-center mb-2">Personalize Your Solution</h1>
+              <p className="text-gray-400 text-sm text-center mb-8">Adjust the sliders to match your lifestyle — watch the estimated investment update in real time.</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                 <div className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm space-y-8">
                   <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest">Visual Demands</h3>
@@ -364,8 +392,28 @@ export default function App() {
                 <span className="text-3xl font-light text-white tracking-tight">${estimatedPrice}</span>
               </div>
               <div className="mt-8 flex justify-center pb-10">
-                <button onClick={handleNext} className="bg-blue-600 text-white px-12 py-5 rounded-full font-bold text-sm shadow-xl hover:bg-blue-700 hover:scale-105 transition-all">Analyze Final Profile</button>
+                <button onClick={handleAnalyze} disabled={analyzing} className="bg-blue-600 text-white px-12 py-5 rounded-full font-bold text-sm shadow-xl hover:bg-blue-700 hover:scale-105 transition-all">Analyze Final Profile</button>
               </div>
+
+              {analyzing && (
+                <div className="fixed inset-0 z-50 bg-gray-900/95 backdrop-blur-xl flex flex-col items-center justify-center animate-fade-in">
+                  <div className="relative mb-10">
+                    <div className="w-28 h-28 rounded-full border-[3px] border-blue-500/20 flex items-center justify-center">
+                      <div className="w-20 h-20 rounded-full border-[3px] border-blue-400/30 flex items-center justify-center animate-spin" style={{animationDuration: '3s'}}>
+                        <div className="w-12 h-12 rounded-full border-[3px] border-transparent border-t-blue-500 animate-spin" style={{animationDuration: '1.5s'}}></div>
+                      </div>
+                    </div>
+                    <div className="absolute -top-2 -right-2 w-4 h-4 bg-blue-400 rounded-full animate-ping"></div>
+                    <div className="absolute -bottom-1 -left-1 w-3 h-3 bg-blue-300 rounded-full animate-ping" style={{animationDelay: '0.5s'}}></div>
+                  </div>
+                  <h2 className="text-3xl font-light text-white mb-4 tracking-tight">Analyzing Your Profile</h2>
+                  <p className="text-blue-300 text-sm font-semibold mb-8 tracking-wide">Processing 4,000,000+ lens combinations to find your perfect match</p>
+                  <div className="w-72 h-1.5 bg-gray-800 rounded-full overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-blue-600 via-blue-400 to-blue-600 rounded-full animate-analyzing-bar"></div>
+                  </div>
+                  <p className="text-gray-500 text-xs mt-6 animate-pulse">Matching lifestyle · Optimizing clarity · Ranking designs</p>
+                </div>
+              )}
             </div>
           )}
 
@@ -501,6 +549,8 @@ export default function App() {
         .animate-scan-horizontal { animation: scan-horizontal 2.5s ease-in-out infinite; }
         @keyframes popIn { 0% { transform: scale(0.95); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         .animate-pop-in { animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes analyzingBar { 0% { width: 0%; } 100% { width: 100%; } }
+        .animate-analyzing-bar { animation: analyzingBar 3s ease-in-out forwards; }
       `}} />
     </div>
   );
