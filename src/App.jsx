@@ -144,7 +144,7 @@ export default function App() {
   const allFrames = [
     { id: 1, name: "Minimalist Titanium", brand: "LINDBERG", type: "Rimless", fitMatch: "99.8%", price: 450, image: "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=400&q=80" },
     { id: 2, name: "Classic Acetate", brand: "Moscot", type: "Full Rim", fitMatch: "96.5%", price: 320, image: "https://dayalopticalsindia.com/cdn/shop/files/Moscot_Frankle_Dark_Green.........webp?v=1761812991" },
-    { id: 3, name: "Aerospace Alloy", brand: "Mykita", type: "Half Rim", fitMatch: "98.2%", price: 550, image: "https://images.unsplash.com/photo-1508296695146-257a814070b4?auto=format&fit=crop&w=400&q=80" },
+    { id: 3, name: "Aerospace Alloy", brand: "Mykita", type: "Half Rim", fitMatch: "98.2%", price: 550, image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/1080x1080/9df78eab33525d08d6e5fb8d27136e95//v/i/Vincent-Chase-VC-E14440-C1-Eyeglasses_J_1616.jpg" },
     { id: 4, name: "Vintage Tortoise", brand: "Oliver Peoples", type: "Full Rim", fitMatch: "97.1%", price: 380, image: "https://cdn.fynd.com/v2/falling-surf-7c8bb8/fyprod/wrkr/products/pictures/item/free/original/000000000493669803/zBT6jgcid7R-0OV5598SU__1731P1__P21__shad__qt.png" },
     { id: 5, name: "Premiere Signature", brand: "Cartier", type: "Rimless", fitMatch: "99.1%", price: 1200, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5M84lkh_3yE9UqacW2SWE8yMT-zzl5MvYqw&s" },
     { id: 6, name: "Bold Square", brand: "Tom Ford", type: "Full Rim", fitMatch: "95.4%", price: 490, image: "https://www.rkumar.in/cdn/shop/files/FT6076-B_001_01_ef60de12-098b-43e3-9590-fb6cf8fa57af.jpg?v=1772851360" }
@@ -484,8 +484,14 @@ export default function App() {
                     <div className="mt-8 pt-8 border-t border-gray-100 flex justify-between items-center bg-gray-900 text-white -mx-10 -mb-10 p-10 rounded-b-[2.5rem] shadow-inner"><span className="text-xs font-bold uppercase tracking-widest text-gray-400">Total Investment</span><span className="text-4xl font-light tracking-tighter">${((selectedLens.price + selectedCoating.price) * selectedFrames.length) + selectedFrames.reduce((acc, f) => acc + f.price, 0)}</span></div>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-4 w-full">
-                    <button onClick={() => handleOrder('hq')} className="flex-1 bg-blue-600 text-white px-8 py-5 rounded-3xl font-bold text-sm shadow-xl hover:bg-blue-700 hover:scale-[1.02] transition-all">Send Order to Zeiss Vision HQ</button>
-                    <button onClick={() => handleOrder('store')} className="flex-1 bg-gray-900 text-white px-8 py-5 rounded-3xl font-bold text-sm shadow-xl hover:bg-gray-800 hover:scale-[1.02] transition-all">Save Order to Zeiss Vision Store</button>
+                    <button onClick={() => handleOrder('hq')} className="flex-1 group bg-[#0071C5] text-white px-8 py-4 rounded-2xl font-medium text-sm shadow-lg hover:shadow-xl hover:bg-[#005fa3] transition-all duration-300 flex items-center justify-center gap-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 opacity-80 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" /></svg>
+                      Send to Zeiss Vision HQ
+                    </button>
+                    <button onClick={() => handleOrder('store')} className="flex-1 group bg-white text-gray-900 px-8 py-4 rounded-2xl font-medium text-sm shadow-sm border border-gray-200 hover:shadow-md hover:border-gray-300 transition-all duration-300 flex items-center justify-center gap-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-gray-400 group-hover:text-gray-600 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016A3.001 3.001 0 0021 9.349m-18 0a2.99 2.99 0 00.621-1.037L4.5 3h15l.879 5.312A2.99 2.99 0 0021 9.35" /></svg>
+                      Save to Vision Store
+                    </button>
                   </div>
                 </>
               )}
