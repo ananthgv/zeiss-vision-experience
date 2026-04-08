@@ -58,7 +58,7 @@ export default function App() {
   const [step, setStep] = useState(0);
 
   // Data States
-  const [patient, setPatient] = useState({ name: '', phone: '', email: '', dob: '' });
+  const [patient, setPatient] = useState({ name: '', phone: '', email: '', dob: '', country: '', pincode: '' });
   const [visucoreStatus, setVisucoreStatus] = useState('guidance'); // guidance, scanning, done
   const [visufitStatus, setVisufitStatus] = useState('guidance'); // guidance, scanning, done
 
@@ -201,13 +201,15 @@ export default function App() {
           {step === 0 && (
             <div className="animate-fade-in max-w-lg w-full text-center mt-8">
               <UserIcon />
-              <h1 className="text-3xl font-light tracking-tight text-gray-900 mb-2">Welcome to Zeiss</h1>
+              <h1 className="text-3xl font-light tracking-tight text-gray-900 mb-2">Welcome to Zeiss Vision Centre</h1>
               <p className="text-gray-500 mb-8 text-sm">Please enter details to begin your personalized vision journey.</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
                 <div className="md:col-span-2"><label className="block text-xs font-semibold text-gray-600 uppercase mb-1">Full Name</label><input type="text" value={patient.name} onChange={(e) => setPatient({ ...patient, name: e.target.value })} placeholder="e.g. Jane Doe" className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none shadow-sm" /></div>
                 <div><label className="block text-xs font-semibold text-gray-600 uppercase mb-1">Date of Birth</label><input type="date" value={patient.dob} onChange={(e) => setPatient({ ...patient, dob: e.target.value })} className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none shadow-sm" /></div>
                 <div><label className="block text-xs font-semibold text-gray-600 uppercase mb-1">Contact Number</label><input type="tel" value={patient.phone} onChange={(e) => setPatient({ ...patient, phone: e.target.value })} placeholder="e.g. +1 (555) 000-0000" className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none shadow-sm" /></div>
                 <div className="md:col-span-2"><label className="block text-xs font-semibold text-gray-600 uppercase mb-1">Email Address</label><input type="email" value={patient.email} onChange={(e) => setPatient({ ...patient, email: e.target.value })} placeholder="jane.doe@example.com" className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none shadow-sm" /></div>
+                <div><label className="block text-xs font-semibold text-gray-600 uppercase mb-1">Country <span className="text-gray-400 normal-case">(optional)</span></label><input type="text" value={patient.country} onChange={(e) => setPatient({ ...patient, country: e.target.value })} placeholder="e.g. India" className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none shadow-sm" /></div>
+                <div><label className="block text-xs font-semibold text-gray-600 uppercase mb-1">Pincode <span className="text-gray-400 normal-case">(optional)</span></label><input type="text" value={patient.pincode} onChange={(e) => setPatient({ ...patient, pincode: e.target.value })} placeholder="e.g. 560001" className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none shadow-sm" /></div>
               </div>
               <button disabled={!patient.name.trim() || !patient.email.trim() || !patient.dob} onClick={handleNext} className={`mt-10 w-full px-8 py-4 rounded-full transition-all font-semibold text-sm shadow-md ${(patient.name.trim() && patient.email.trim() && patient.dob) ? 'bg-gray-900 text-white hover:bg-gray-800' : 'bg-gray-200 text-gray-400'}`}>Start Experience</button>
             </div>
