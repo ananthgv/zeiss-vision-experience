@@ -203,7 +203,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#F5F5F7] text-gray-900 font-sans flex flex-col items-center justify-center p-4 md:p-6 selection:bg-blue-100">
 
-      <div className="w-full max-w-6xl bg-white rounded-3xl shadow-2xl overflow-hidden min-h-[750px] flex flex-col relative transition-all duration-500 ease-in-out">
+      <div className="w-full max-w-6xl bg-white rounded-3xl shadow-2xl overflow-hidden h-[85vh] min-h-[750px] max-h-[1000px] flex flex-col relative transition-all duration-500 ease-in-out">
 
         {/* Global Header */}
         <header className="px-8 py-5 flex justify-between items-center border-b border-gray-100 bg-white z-20 shadow-sm relative">
