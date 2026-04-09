@@ -83,6 +83,7 @@ export default function App() {
   const [frameTypeFilter, setFrameTypeFilter] = useState('All');
   const [brandFilter, setBrandFilter] = useState('All');
   const [orderStatus, setOrderStatus] = useState('idle'); // idle, processing, success
+  const [orderId, setOrderId] = useState(null);
   const [analyzing, setAnalyzing] = useState(false);
 
   const handlePatientLookup = () => {
@@ -112,7 +113,10 @@ export default function App() {
 
   const handleOrder = (destination) => {
     setOrderStatus('processing');
-    setTimeout(() => setOrderStatus('success'), 2500);
+    setTimeout(() => {
+      setOrderId('ZV-' + Math.floor(100000 + Math.random() * 900000));
+      setOrderStatus('success');
+    }, 2500);
   };
 
   // Trigger Visucore Scan Manually
@@ -598,8 +602,18 @@ export default function App() {
                   </div>
                   <h2 className="text-4xl font-light tracking-tight text-gray-900 mb-2">Order Complete!</h2>
                   <h3 className="text-xl font-medium text-blue-600 mb-4">Thank you for choosing Zeiss.</h3>
-                  <p className="text-gray-500 mb-8 max-w-md">Your bespoke Zeiss lenses and frames are successfully processed. We will notify you when they are ready for fitting.</p>
                   
+                  <div className="bg-gray-50 border border-gray-100 rounded-2xl p-6 mb-8 w-full max-w-sm flex flex-col gap-2 shadow-sm text-left animate-pop-in mt-4">
+                    <div className="flex justify-between items-center border-b border-gray-200 pb-3">
+                      <span className="text-gray-500 text-sm font-medium uppercase tracking-wider">Order Reference</span>
+                      <span className="text-gray-900 font-bold bg-white px-3 py-1 rounded shadow-sm border border-gray-100">{orderId}</span>
+                    </div>
+                    <div className="pt-2">
+                       <p className="text-sm text-gray-600 mb-2"><strong>Estimated Delivery:</strong> 7–10 business days</p>
+                       <p className="text-sm text-gray-600 leading-relaxed text-blue-900 bg-blue-50/50 p-3 rounded-lg border border-blue-100">Your bespoke lenses and frames will be securely delivered to your local <strong>{dealerType || 'ZEISS Vision Center'}</strong> for final fitting.</p>
+                    </div>
+                  </div>
+
                   <div className="flex gap-4 mb-8">
                     <a href="./architecture.html" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-3 bg-white border border-gray-200 px-6 py-3.5 rounded-2xl text-sm font-medium text-gray-700 hover:border-gray-300 hover:shadow-md transition-all duration-300">
                       <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-blue-500 group-hover:text-blue-600 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" /></svg>
