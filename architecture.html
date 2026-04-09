@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zeiss Vision Experience — Architecture</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    background: #FAFAFA;
+    color: #1D1D1F;
+    padding: 60px 40px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .page-header h1 {
+    font-size: 42px;
+    font-weight: 300;
+    letter-spacing: -0.5px;
+    color: #1D1D1F;
+    margin-bottom: 8px;
+  }
+  .page-header p {
+    font-size: 15px;
+    color: #86868B;
+    font-weight: 400;
+  }
+
+  /* --- Column headers --- */
+  .columns-header {
+    max-width: 960px;
+    margin: 0 auto 12px;
+    display: grid;
+    grid-template-columns: 1fr 48px 1fr;
+    align-items: end;
+    padding: 0 0 16px;
+    border-bottom: 1px solid #E8E8ED;
+  }
+  .col-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #86868B;
+  }
+  .col-label.left { text-align: center; }
+  .col-label.right { text-align: center; }
+
+  /* --- Main container --- */
+  .architecture {
+    max-width: 960px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  /* Vertical spine */
+  .spine {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: #E8E8ED;
+    z-index: 0;
+  }
+
+  /* --- Stage row --- */
+  .stage-row {
+    display: grid;
+    grid-template-columns: 1fr 48px 1fr;
+    align-items: stretch;
+    position: relative;
+    z-index: 1;
+    padding: 16px 0;
+  }
+
+  /* --- Center step node --- */
+  .step-node {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+  .step-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    border: 2px solid #D2D2D7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: #86868B;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+
+  /* --- Cards --- */
+  .frontend-card, .backend-card {
+    border-radius: 14px;
+    padding: 20px 22px;
+    position: relative;
+  }
+
+  .frontend-card {
+    background: #FFFFFF;
+    border: 1px solid #E8E8ED;
+    margin-right: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+
+  .backend-card {
+    background: #F5F5F7;
+    border: 1px solid #E8E8ED;
+    margin-left: 20px;
+  }
+
+  /* Connector lines */
+  .frontend-card::after {
+    content: '';
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    width: 20px;
+    height: 1px;
+    background: #D2D2D7;
+  }
+  .backend-card::before {
+    content: '';
+    position: absolute;
+    left: -20px;
+    top: 50%;
+    width: 20px;
+    height: 1px;
+    background: #D2D2D7;
+  }
+
+  /* Arrow tip on connector */
+  .backend-card::after {
+    content: '';
+    position: absolute;
+    left: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    border-left: 5px solid #D2D2D7;
+  }
+
+  /* --- Card typography --- */
+  .card-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #0071C5;
+    margin-bottom: 4px;
+  }
+  .card-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: #1D1D1F;
+    margin-bottom: 3px;
+    letter-spacing: -0.1px;
+  }
+  .card-desc {
+    font-size: 12px;
+    color: #86868B;
+    line-height: 1.5;
+  }
+
+  /* --- Service items inside backend card --- */
+  .service-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+  }
+  .service-item + .service-item {
+    border-top: 1px solid #E8E8ED;
+    margin-top: 6px;
+    padding-top: 10px;
+  }
+
+  .svc-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 13px;
+  }
+  .svc-icon.device  { background: #FEF3C7; }
+  .svc-icon.db      { background: #DBEAFE; }
+  .svc-icon.ai      { background: #EDE9FE; }
+  .svc-icon.catalog { background: #D1FAE5; }
+  .svc-icon.order   { background: #FFE4E6; }
+  .svc-icon.pay     { background: #FEF9C3; }
+
+  .svc-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: #1D1D1F;
+    line-height: 1.2;
+  }
+  .svc-detail {
+    font-size: 10px;
+    color: #86868B;
+    line-height: 1.3;
+  }
+
+  /* Data flow label */
+  .flow-tag {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: #0071C5;
+    background: #EBF5FF;
+    padding: 2px 7px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+
+  .badge-optional {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #D97706;
+    background: #FFFBEB;
+    padding: 2px 7px;
+    border-radius: 4px;
+    margin-left: 6px;
+  }
+
+  /* --- Legend --- */
+  .footer-section {
+    max-width: 960px;
+    margin: 48px auto 0;
+    padding-top: 32px;
+    border-top: 1px solid #E8E8ED;
+    text-align: center;
+  }
+  .footer-section h2 {
+    font-size: 13px;
+    font-weight: 600;
+    color: #86868B;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .legend {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+  }
+  .legend-text {
+    font-size: 11px;
+    color: #86868B;
+    font-weight: 500;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>System Architecture</h1>
+  <p>Zeiss Vision Experience — End-to-end workflow with backend integrations</p>
+</div>
+
+<!-- Column Headers -->
+<div class="columns-header">
+  <div class="col-label left">Frontend · UI Stages</div>
+  <div></div>
+  <div class="col-label right">Backend · Services & Data</div>
+</div>
+
+<div class="architecture">
+  <div class="spine"></div>
+
+  <!-- Stage 1 -->
+  <div class="stage-row">
+    <div class="frontend-card">
+      <div class="card-label">Stage 1</div>
+      <div class="card-title">Patient Onboarding</div>
+      <div class="card-desc">Name, DOB, contact, country & pincode intake</div>
+    </div>
+    <div class="step-node"><div class="step-circle">1</div></div>
+    <div class="backend-card">
+      <div class="flow-tag">→ Create / Lookup</div>
+      <div class="service-item">
+        <div class="svc-icon db">🗄</div>
+        <div><div class="svc-name">Patient Database</div><div class="svc-detail">Cloud-hosted patient records</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage 2 -->
+  <div class="stage-row">
+    <div class="frontend-card">
+      <div class="card-label">Stage 2</div>
+      <div class="card-title">Refraction Measurement</div>
+      <div class="card-desc">Objective autorefraction baseline, then subjective "1 or 2?" fine-tuning</div>
+    </div>
+    <div class="step-node"><div class="step-circle">2</div></div>
+    <div class="backend-card">
+      <div class="flow-tag">← Rx Data</div>
+      <div class="service-item">
+        <div class="svc-icon device">🔬</div>
+        <div><div class="svc-name">VISUCORE 500</div><div class="svc-detail">Objective + Subjective refraction device</div></div>
+      </div>
+      <div class="service-item">
+        <div class="svc-icon db">🗄</div>
+        <div><div class="svc-name">Refraction Database</div><div class="svc-detail">Sph, Cyl, Axis, Add, VA records</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage 3 -->
+  <div class="stage-row">
+    <div class="frontend-card">
+      <div class="card-label">Stage 3 <span class="badge-optional">Optional</span></div>
+      <div class="card-title">3D Centration</div>
+      <div class="card-desc">180° facial avatar scan for contactless lens centration</div>
+    </div>
+    <div class="step-node"><div class="step-circle">3</div></div>
+    <div class="backend-card">
+      <div class="flow-tag">← Avatar + Centration</div>
+      <div class="service-item">
+        <div class="svc-icon device">📸</div>
+        <div><div class="svc-name">VISUFIT 1000</div><div class="svc-detail">9-camera 3D scanning rig</div></div>
+      </div>
+      <div class="service-item">
+        <div class="svc-icon db">🗄</div>
+        <div><div class="svc-name">Avatar Store</div><div class="svc-detail">3D model + centration points</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage 4 -->
+  <div class="stage-row">
+    <div class="frontend-card">
+      <div class="card-label">Stage 4</div>
+      <div class="card-title">Lifestyle Profiling</div>
+      <div class="card-desc">Screen, driving, outdoor, cognitive & fatigue sliders with real-time pricing</div>
+    </div>
+    <div class="step-node"><div class="step-circle">4</div></div>
+    <div class="backend-card">
+      <div class="flow-tag">→ Slider Data · ← Coatings</div>
+      <div class="service-item">
+        <div class="svc-icon ai">🧠</div>
+        <div><div class="svc-name">Lifestyle Analyzer</div><div class="svc-detail">Enriches Rx data with visual demands</div></div>
+      </div>
+      <div class="service-item">
+        <div class="svc-icon catalog">📋</div>
+        <div><div class="svc-name">Coating Catalog</div><div class="svc-detail">DuraVision Chrome, Platinum, BlueProtect</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage 5 -->
+  <div class="stage-row">
+    <div class="frontend-card">
+      <div class="card-label">Stage 5</div>
+      <div class="card-title">Lens Recommendation</div>
+      <div class="card-desc">AI-ranked Top Match, Alternative & Standard with "Why?" insights</div>
+    </div>
+    <div class="step-node"><div class="step-circle">5</div></div>
+    <div class="backend-card">
+      <div class="flow-tag">← Top 3 Results</div>
+      <div class="service-item">
+        <div class="svc-icon ai">🤖</div>
+        <div><div class="svc-name">AI Recommendation Engine</div><div class="svc-detail">4M+ lens combinations analyzed</div></div>
+      </div>
+      <div class="service-item">
+        <div class="svc-icon catalog">📋</div>
+        <div><div class="svc-name">Lens Catalog</div><div class="svc-detail">SmartLife, DriveSafe, PhotoFusion, ClearView</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage 6 -->
+  <div class="stage-row">
+    <div class="frontend-card">
+      <div class="card-label">Stage 6</div>
+      <div class="card-title">Frame Selection</div>
+      <div class="card-desc">Multi-select frames with brand, type filters and stock badges</div>
+    </div>
+    <div class="step-node"><div class="step-circle">6</div></div>
+    <div class="backend-card">
+      <div class="flow-tag">← Frames + Stock Status</div>
+      <div class="service-item">
+        <div class="svc-icon catalog">🕶</div>
+        <div><div class="svc-name">Frame Catalog</div><div class="svc-detail">LINDBERG, Moscot, Cartier, Tom Ford…</div></div>
+      </div>
+      <div class="service-item">
+        <div class="svc-icon order">📦</div>
+        <div><div class="svc-name">Inventory Service</div><div class="svc-detail">In Store / Order from HQ availability</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage 7 -->
+  <div class="stage-row">
+    <div class="frontend-card">
+      <div class="card-label">Stage 7</div>
+      <div class="card-title">Order & Checkout</div>
+      <div class="card-desc">Investment breakdown — send to Zeiss HQ or save to local store</div>
+    </div>
+    <div class="step-node"><div class="step-circle">7</div></div>
+    <div class="backend-card">
+      <div class="flow-tag">→ Fulfillment</div>
+      <div class="service-item">
+        <div class="svc-icon order">📝</div>
+        <div><div class="svc-name">Order Management</div><div class="svc-detail">HQ fulfillment or local store POS</div></div>
+      </div>
+      <div class="service-item">
+        <div class="svc-icon pay">💳</div>
+        <div><div class="svc-name">Payment Gateway</div><div class="svc-detail">Secure transaction processing</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Legend -->
+<div class="footer-section">
+  <h2>Service Legend</h2>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#FEF3C7"></div><span class="legend-text">Clinical Device</span></div>
+    <div class="legend-item"><div class="legend-dot" style="background:#DBEAFE"></div><span class="legend-text">Database</span></div>
+    <div class="legend-item"><div class="legend-dot" style="background:#EDE9FE"></div><span class="legend-text">AI / Analytics</span></div>
+    <div class="legend-item"><div class="legend-dot" style="background:#D1FAE5"></div><span class="legend-text">Product Catalog</span></div>
+    <div class="legend-item"><div class="legend-dot" style="background:#FFE4E6"></div><span class="legend-text">Order & Fulfillment</span></div>
+    <div class="legend-item"><div class="legend-dot" style="background:#FEF9C3"></div><span class="legend-text">Payment</span></div>
+  </div>
+</div>
+
+</body>
+</html>
