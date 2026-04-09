@@ -59,6 +59,10 @@ export default function App() {
 
   // Data States
   const [patient, setPatient] = useState({ name: '', phone: '', email: '', dob: '', country: '', pincode: '' });
+  const [patientType, setPatientType] = useState('new'); // 'existing' | 'new'
+  const [lookupPhone, setLookupPhone] = useState('');
+  const [isSearchingPatient, setIsSearchingPatient] = useState(false);
+  
   const [visucoreStatus, setVisucoreStatus] = useState('guidance'); // guidance, scanning, done
   const [visufitStatus, setVisufitStatus] = useState('guidance'); // guidance, scanning, done
 
@@ -79,6 +83,23 @@ export default function App() {
   const [brandFilter, setBrandFilter] = useState('All');
   const [orderStatus, setOrderStatus] = useState('idle'); // idle, processing, success
   const [analyzing, setAnalyzing] = useState(false);
+
+  const handlePatientLookup = () => {
+    if (!lookupPhone) return;
+    setIsSearchingPatient(true);
+    setTimeout(() => {
+      // Mock retrieving data from Patient DB
+      setPatient({
+        name: 'Jane Doe',
+        phone: lookupPhone,
+        email: 'jane.doe@example.com',
+        dob: '1985-06-15',
+        country: 'India',
+        pincode: '560001'
+      });
+      setIsSearchingPatient(false);
+    }, 1200);
+  };
 
   const handleAnalyze = () => {
     setAnalyzing(true);
@@ -212,15 +233,50 @@ export default function App() {
               <UserIcon />
               <h1 className="text-3xl font-light tracking-tight text-gray-900 mb-2">Welcome to Zeiss Vision Centre</h1>
               <p className="text-gray-500 mb-8 text-sm">Please enter details to begin your personalized vision journey.</p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
-                <div className="md:col-span-2"><label className="block text-xs font-semibold text-gray-600 uppercase mb-1">Full Name</label><input type="text" value={patient.name} onChange={(e) => setPatient({ ...patient, name: e.target.value })} placeholder="e.g. Jane Doe" className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none shadow-sm" /></div>
-                <div><label className="block text-xs font-semibold text-gray-600 uppercase mb-1">Date of Birth</label><input type="date" value={patient.dob} onChange={(e) => setPatient({ ...patient, dob: e.target.value })} className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none shadow-sm" /></div>
-                <div><label className="block text-xs font-semibold text-gray-600 uppercase mb-1">Contact Number</label><input type="tel" value={patient.phone} onChange={(e) => setPatient({ ...patient, phone: e.target.value })} placeholder="e.g. +1 (555) 000-0000" className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none shadow-sm" /></div>
-                <div className="md:col-span-2"><label className="block text-xs font-semibold text-gray-600 uppercase mb-1">Email Address</label><input type="email" value={patient.email} onChange={(e) => setPatient({ ...patient, email: e.target.value })} placeholder="jane.doe@example.com" className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none shadow-sm" /></div>
-                <div><label className="block text-xs font-semibold text-gray-600 uppercase mb-1">Country <span className="text-gray-400 normal-case">(optional)</span></label><input type="text" value={patient.country} onChange={(e) => setPatient({ ...patient, country: e.target.value })} placeholder="e.g. India" className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none shadow-sm" /></div>
-                <div><label className="block text-xs font-semibold text-gray-600 uppercase mb-1">Pincode <span className="text-gray-400 normal-case">(optional)</span></label><input type="text" value={patient.pincode} onChange={(e) => setPatient({ ...patient, pincode: e.target.value })} placeholder="e.g. 560001" className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none shadow-sm" /></div>
+              
+              <div className="bg-white p-2 rounded-2xl shadow-sm border border-gray-100 flex gap-2 mb-8 mx-auto w-fit">
+                <button 
+                  onClick={() => { setPatientType('existing'); setPatient({ name: '', phone: '', email: '', dob: '', country: '', pincode: '' }) }} 
+                  className={`px-6 py-2.5 rounded-xl text-sm font-semibold transition-all ${patientType === 'existing' ? 'bg-blue-600 text-white shadow-md' : 'text-gray-500 hover:bg-gray-50'}`}>Existing Patient</button>
+                <button 
+                  onClick={() => setPatientType('new')} 
+                  className={`px-6 py-2.5 rounded-xl text-sm font-semibold transition-all ${patientType === 'new' ? 'bg-blue-600 text-white shadow-md' : 'text-gray-500 hover:bg-gray-50'}`}>New Patient</button>
               </div>
-              <button disabled={!patient.name.trim() || !patient.email.trim() || !patient.dob} onClick={handleNext} className={`mt-10 w-full px-8 py-4 rounded-full transition-all font-semibold text-sm shadow-md ${(patient.name.trim() && patient.email.trim() && patient.dob) ? 'bg-gray-900 text-white hover:bg-gray-800' : 'bg-gray-200 text-gray-400'}`}>Start Experience</button>
+
+              {patientType === 'existing' && !patient.name && (
+                <div className="flex gap-2 items-end text-left max-w-xs mx-auto mb-8 animate-pop-in">
+                  <div className="flex-1">
+                    <label className="block text-xs font-semibold text-gray-600 uppercase mb-1">Mobile Number</label>
+                    <input 
+                      type="tel" 
+                      value={lookupPhone} 
+                      onChange={(e) => setLookupPhone(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && handlePatientLookup()}
+                      placeholder="+1 (555) 000-0000" 
+                      className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none shadow-sm" 
+                    />
+                  </div>
+                  <button 
+                    onClick={handlePatientLookup} 
+                    disabled={isSearchingPatient || !lookupPhone}
+                    className="bg-gray-900 text-white px-6 py-4 rounded-xl font-bold shadow-sm hover:bg-gray-800 transition-all whitespace-nowrap disabled:bg-gray-200 disabled:text-gray-400">
+                    {isSearchingPatient ? 'Searching...' : 'Find'}
+                  </button>
+                </div>
+              )}
+
+              {(patientType === 'new' || patient.name) && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left animate-pop-in">
+                  <div className="md:col-span-2"><label className="block text-xs font-semibold text-gray-600 uppercase mb-1">Full Name</label><input type="text" value={patient.name} onChange={(e) => setPatient({ ...patient, name: e.target.value })} placeholder="e.g. Jane Doe" className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none shadow-sm" /></div>
+                  <div><label className="block text-xs font-semibold text-gray-600 uppercase mb-1">Date of Birth</label><input type="date" value={patient.dob} onChange={(e) => setPatient({ ...patient, dob: e.target.value })} className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none shadow-sm" /></div>
+                  <div><label className="block text-xs font-semibold text-gray-600 uppercase mb-1">Contact Number</label><input type="tel" value={patient.phone} onChange={(e) => setPatient({ ...patient, phone: e.target.value })} placeholder="e.g. +1 (555) 000-0000" className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none shadow-sm" /></div>
+                  <div className="md:col-span-2"><label className="block text-xs font-semibold text-gray-600 uppercase mb-1">Email Address</label><input type="email" value={patient.email} onChange={(e) => setPatient({ ...patient, email: e.target.value })} placeholder="jane.doe@example.com" className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none shadow-sm" /></div>
+                  <div><label className="block text-xs font-semibold text-gray-600 uppercase mb-1">Country <span className="text-gray-400 normal-case">(optional)</span></label><input type="text" value={patient.country} onChange={(e) => setPatient({ ...patient, country: e.target.value })} placeholder="e.g. India" className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none shadow-sm" /></div>
+                  <div><label className="block text-xs font-semibold text-gray-600 uppercase mb-1">Pincode <span className="text-gray-400 normal-case">(optional)</span></label><input type="text" value={patient.pincode} onChange={(e) => setPatient({ ...patient, pincode: e.target.value })} placeholder="e.g. 560001" className="w-full p-4 bg-white border border-gray-200 rounded-xl outline-none shadow-sm" /></div>
+                </div>
+              )}
+              
+              <button disabled={!patient.name.trim() || !patient.email.trim() || !patient.dob} onClick={handleNext} className={`mt-10 w-full px-8 py-4 rounded-full transition-all font-semibold text-sm shadow-md ${(patient.name.trim() && patient.email.trim() && patient.dob) ? 'bg-gray-900 text-white hover:bg-gray-800' : 'hidden'}`}>Start Experience</button>
             </div>
           )}
 
