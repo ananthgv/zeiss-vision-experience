@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zeiss Vision Experience — Production Roadmap</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    background: #FAFAFA;
+    color: #1D1D1F;
+    padding: 60px 40px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page-header { text-align: center; margin-bottom: 56px; }
+  .page-header h1 { font-size: 42px; font-weight: 300; letter-spacing: -0.5px; margin-bottom: 8px; }
+  .page-header p { font-size: 15px; color: #86868B; }
+  .container { max-width: 820px; margin: 0 auto; }
+
+  /* Phase block */
+  .phase { margin-bottom: 56px; }
+  .phase-label {
+    font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+    color: #0071C5; margin-bottom: 6px;
+  }
+  .phase-title { font-size: 24px; font-weight: 400; letter-spacing: -0.3px; margin-bottom: 20px; }
+  .phase-desc { font-size: 14px; color: #86868B; line-height: 1.7; margin-bottom: 24px; }
+
+  /* Table */
+  table { width: 100%; border-collapse: collapse; margin-bottom: 24px; border-radius: 12px; overflow: hidden; }
+  thead th {
+    background: #F5F5F7; font-size: 10px; font-weight: 600; letter-spacing: 1.2px;
+    text-transform: uppercase; color: #86868B; padding: 12px 16px; text-align: left; border-bottom: 1px solid #E8E8ED;
+  }
+  tbody td {
+    padding: 14px 16px; font-size: 13px; color: #1D1D1F; border-bottom: 1px solid #F0F0F3;
+    vertical-align: top; line-height: 1.5;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr { background: #FFFFFF; }
+  tbody tr:hover { background: #FAFAFA; }
+  td strong { font-weight: 500; }
+  td:first-child { font-weight: 500; }
+
+  /* Cards */
+  .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .card {
+    background: #FFFFFF; border: 1px solid #E8E8ED; border-radius: 14px; padding: 22px 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+  }
+  .card-title { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+  .card-sub { font-size: 12px; color: #86868B; line-height: 1.5; }
+
+  /* Option blocks */
+  .option-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .option {
+    background: #FFFFFF; border: 1px solid #E8E8ED; border-radius: 14px; padding: 22px 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+  }
+  .option-badge {
+    font-size: 9px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 5px; display: inline-block; margin-bottom: 10px;
+  }
+  .option-badge.rec { background: #DBEAFE; color: #1E40AF; }
+  .option-badge.alt { background: #F5F5F7; color: #6B7280; }
+  .option-badge.best { background: #D1FAE5; color: #065F46; }
+  .option-title { font-size: 15px; font-weight: 500; margin-bottom: 6px; }
+  .option-desc { font-size: 12px; color: #86868B; line-height: 1.5; margin-bottom: 10px; }
+  .option-pros, .option-cons { font-size: 11px; line-height: 1.6; }
+  .option-pros { color: #059669; }
+  .option-cons { color: #DC2626; }
+
+  /* Checklist */
+  .checklist { list-style: none; }
+  .checklist li {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 0; border-bottom: 1px solid #F0F0F3;
+    font-size: 13px; line-height: 1.5; color: #1D1D1F;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .check-box {
+    width: 18px; height: 18px; border: 2px solid #D2D2D7; border-radius: 4px;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .check-label strong { font-weight: 500; }
+  .check-label span { color: #86868B; }
+
+  /* Priority labels */
+  .priority-label {
+    font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+    color: #86868B; margin-bottom: 12px; margin-top: 32px;
+    padding-bottom: 8px; border-bottom: 1px solid #E8E8ED;
+  }
+  .priority-label:first-of-type { margin-top: 0; }
+
+  /* Callout */
+  .callout {
+    background: #EBF5FF; border: 1px solid #BFDBFE; border-radius: 12px;
+    padding: 20px 24px; margin-top: 32px;
+  }
+  .callout p { font-size: 13px; color: #1E40AF; line-height: 1.6; }
+  .callout strong { font-weight: 600; }
+
+  /* Divider */
+  hr { border: none; border-top: 1px solid #E8E8ED; margin: 48px 0; }
+
+  /* Back link */
+  .back-link {
+    text-align: center; margin-top: 48px;
+  }
+  .back-link a {
+    font-size: 13px; color: #0071C5; text-decoration: none; font-weight: 500;
+  }
+  .back-link a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="page-header">
+  <h1>Production Roadmap</h1>
+  <p>A practical guide for taking this prototype to production</p>
+</div>
+
+<!-- Phase 1 -->
+<div class="phase">
+  <div class="phase-label">Phase 1</div>
+  <div class="phase-title">Stakeholder Validation & Feedback</div>
+  <div class="phase-desc">Before any backend work, validate the experience with the people who will use it every day.</div>
+
+  <table>
+    <thead><tr><th>Persona</th><th>Why Their Input Matters</th></tr></thead>
+    <tbody>
+      <tr><td>Optometrist</td><td>Validates clinical accuracy — Rx data presentation, VISUCORE/VISUFIT guidance, and whether the workflow matches real device operation</td></tr>
+      <tr><td>Dispensing Optician</td><td>The primary daily user — tests frame selection, coating comparisons, pricing logic, and order placement UX</td></tr>
+      <tr><td>Store Manager</td><td>Evaluates operational fit — patient throughput, inventory accuracy, and order routing (HQ vs local POS)</td></tr>
+      <tr><td>Patient / Consumer</td><td>Tests the "premium feel" — is it approachable? Does the AI recommendation build confidence or confusion?</td></tr>
+      <tr><td>Zeiss Sales / Account Mgr</td><td>Can this be used as a demo tool for pitching Zeiss equipment + lens bundles to new stores?</td></tr>
+      <tr><td>IT / Systems Admin</td><td>Evaluates deployment feasibility — on-premise vs cloud, device integration, data security</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<hr>
+
+<!-- Phase 2 -->
+<div class="phase">
+  <div class="phase-label">Phase 2</div>
+  <div class="phase-title">Backend Integration Strategy</div>
+  <div class="phase-desc">The app's stage-based architecture means each step can be wired to a real backend independently — no big-bang rewrite needed.</div>
+
+  <table>
+    <thead><tr><th>Stage</th><th>Current (Hardcoded)</th><th>Production Backend</th></tr></thead>
+    <tbody>
+      <tr><td>Patient</td><td>Local React state</td><td><strong>Patient Management System</strong> — REST API for create/lookup</td></tr>
+      <tr><td>Refraction</td><td>Simulated scan + static Rx</td><td><strong>VISUCORE 500 API</strong> — Query device DB for latest Rx</td></tr>
+      <tr><td>Centration</td><td>Simulated 3D scan</td><td><strong>VISUFIT 1000 API</strong> — Fetch avatar + centration data</td></tr>
+      <tr><td>Lifestyle</td><td>Hardcoded coating list</td><td><strong>Zeiss Product API</strong> — Dynamic coatings with pricing</td></tr>
+      <tr><td>Lens</td><td>JavaScript if/else logic</td><td><strong>AI/ML Service</strong> — POST Rx + lifestyle → ranked lenses</td></tr>
+      <tr><td>Frames</td><td>Static array of 6 frames</td><td><strong>Frame Catalog + Inventory API</strong> — Real-time stock</td></tr>
+      <tr><td>Checkout</td><td>No-op button click</td><td><strong>OMS + Payment Gateway</strong> — Fulfillment + transactions</td></tr>
+    </tbody>
+  </table>
+
+  <div class="option-row">
+    <div class="option">
+      <div class="option-badge rec">Recommended</div>
+      <div class="option-title">Cloud-First</div>
+      <div class="option-desc">SPA on CDN, APIs on Zeiss cloud, device data synced via secure gateway</div>
+      <div class="option-pros">+ Easy updates, centralized analytics</div>
+      <div class="option-cons">– Requires in-store internet</div>
+    </div>
+    <div class="option">
+      <div class="option-badge alt">Alternative</div>
+      <div class="option-title">On-Premise / Hybrid</div>
+      <div class="option-desc">Local server in-store, periodic cloud sync, LAN device integration</div>
+      <div class="option-pros">+ Works offline, data stays local</div>
+      <div class="option-cons">– Per-store maintenance</div>
+    </div>
+    <div class="option">
+      <div class="option-badge best">Best of Both</div>
+      <div class="option-title">Progressive Web App</div>
+      <div class="option-desc">PWA with offline caching, syncs to cloud when connected</div>
+      <div class="option-pros">+ Resilient, installable on kiosks</div>
+      <div class="option-cons">– More complex service worker logic</div>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<!-- Phase 3 -->
+<div class="phase">
+  <div class="phase-label">Phase 3</div>
+  <div class="phase-title">Feature Enhancements</div>
+
+  <div class="priority-label">High Priority</div>
+  <ul class="checklist">
+    <li><div class="check-box"></div><div class="check-label"><strong>Real device handshake</strong> — <span>Poll VISUCORE / VISUFIT for scan completion instead of simulated timers</span></div></li>
+    <li><div class="check-box"></div><div class="check-label"><strong>Dynamic product catalog</strong> — <span>Lenses, coatings, frames from API with real pricing and images</span></div></li>
+    <li><div class="check-box"></div><div class="check-label"><strong>Persistent patient sessions</strong> — <span>Save progress so patients can pause and resume</span></div></li>
+    <li><div class="check-box"></div><div class="check-label"><strong>Multi-language support</strong> — <span>German, Mandarin, Japanese, Hindi for global stores</span></div></li>
+    <li><div class="check-box"></div><div class="check-label"><strong>Print / PDF export</strong> — <span>Professional prescription + order summary for the patient</span></div></li>
+  </ul>
+
+  <div class="priority-label">Medium Priority</div>
+  <ul class="checklist">
+    <li><div class="check-box"></div><div class="check-label"><strong>AR frame try-on</strong> — <span>Virtual preview using VISUFIT avatar data</span></div></li>
+    <li><div class="check-box"></div><div class="check-label"><strong>Staff authentication</strong> — <span>Role-based access for optometrist vs optician</span></div></li>
+    <li><div class="check-box"></div><div class="check-label"><strong>Analytics dashboard</strong> — <span>Conversion rates, popular lenses, average order value</span></div></li>
+    <li><div class="check-box"></div><div class="check-label"><strong>Appointment scheduling</strong> — <span>Book follow-up fitting from order confirmation</span></div></li>
+    <li><div class="check-box"></div><div class="check-label"><strong>Rx history</strong> — <span>Returning patients see previous prescription for comparison</span></div></li>
+  </ul>
+
+  <div class="priority-label">Nice to Have</div>
+  <ul class="checklist">
+    <li><div class="check-box"></div><div class="check-label"><strong>Tablet-optimized layout</strong> — <span>Most in-store kiosks are iPad-based</span></div></li>
+    <li><div class="check-box"></div><div class="check-label"><strong>Dark mode</strong> — <span>For stores with controlled lighting environments</span></div></li>
+    <li><div class="check-box"></div><div class="check-label"><strong>Voice guidance</strong> — <span>Accessibility for visually impaired patients</span></div></li>
+    <li><div class="check-box"></div><div class="check-label"><strong>QR code sharing</strong> — <span>Patient scans QR to view recommendation on their phone</span></div></li>
+  </ul>
+</div>
+
+<hr>
+
+<!-- Phase 4 -->
+<div class="phase">
+  <div class="phase-label">Phase 4</div>
+  <div class="phase-title">Compliance & Security</div>
+  <div class="card-grid">
+    <div class="card"><div class="card-title">HIPAA / GDPR</div><div class="card-sub">Patient health data encrypted at rest and in transit</div></div>
+    <div class="card"><div class="card-title">Data Residency</div><div class="card-sub">Patient records stay in the correct geographic region</div></div>
+    <div class="card"><div class="card-title">Audit Logging</div><div class="card-sub">Track who accessed or modified patient records</div></div>
+    <div class="card"><div class="card-title">Consent Management</div><div class="card-sub">Patient opt-in for data storage and sharing</div></div>
+  </div>
+</div>
+
+<hr>
+
+<!-- Phase 5 -->
+<div class="phase">
+  <div class="phase-label">Phase 5</div>
+  <div class="phase-title">Go-to-Market</div>
+  <ul class="checklist">
+    <li><div class="check-box"></div><div class="check-label"><strong>Pilot in 2–3 Zeiss Vision Centre locations</strong></div></li>
+    <li><div class="check-box"></div><div class="check-label"><strong>Measure</strong> — <span>Patient satisfaction, staff efficiency, order accuracy, average transaction value</span></div></li>
+    <li><div class="check-box"></div><div class="check-label"><strong>Iterate based on pilot data</strong></div></li>
+    <li><div class="check-box"></div><div class="check-label"><strong>Develop training materials</strong> — <span>Onboarding guides for store staff</span></div></li>
+    <li><div class="check-box"></div><div class="check-label"><strong>Roll out to broader Zeiss Vision Centre network</strong></div></li>
+  </ul>
+</div>
+
+<div class="callout">
+  <p><strong>Key takeaway:</strong> The prototype's clean stage-based architecture makes it naturally "pluggable" — each stage is independent and can be wired to a real backend service without touching the others. Production integration can happen incrementally, one stage at a time, while keeping the app functional throughout.</p>
+</div>
+
+<div class="back-link">
+  <a href="./index.html">← Back to Zeiss Vision Experience</a>
+</div>
+
+</div>
+</body>
+</html>
