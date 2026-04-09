@@ -55,6 +55,10 @@ const COATINGS = [
 
 // --- Main Application Component ---
 export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [passwordInput, setPasswordInput] = useState('');
+  const [passwordError, setPasswordError] = useState(false);
+  
   const [step, setStep] = useState(-1);
   const [dealerType, setDealerType] = useState(null);
 
@@ -199,6 +203,37 @@ export default function App() {
   ];
 
   const handleNext = () => setStep(prev => Math.min(prev + 1, steps.length - 1));
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (passwordInput === 'ZVC-baskar-101') {
+      setIsAuthenticated(true);
+    } else {
+      setPasswordError(true);
+    }
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-[#F5F5F7] font-sans flex items-center justify-center p-4">
+        <div className="animate-fade-in bg-white p-10 rounded-[2rem] shadow-xl w-full max-w-sm text-center border border-gray-100">
+          <div className="flex justify-center mb-8 opacity-90"><ZeissLogo /></div>
+          <h2 className="text-2xl font-light text-gray-900 mb-2">Prototype Access</h2>
+          <p className="text-sm text-gray-500 mb-8">Please enter the password to view the ZEISS Vision Experience prototype.</p>
+          <form onSubmit={handleLogin} className="flex flex-col gap-4">
+            <input 
+              type="password" 
+              value={passwordInput}
+              onChange={(e) => { setPasswordInput(e.target.value); setPasswordError(false); }}
+              className={`w-full p-4 border rounded-xl outline-none transition-all ${passwordError ? 'border-red-400 bg-red-50 text-red-900' : 'border-gray-200 bg-gray-50 focus:border-blue-400 focus:bg-white focus:shadow-sm'}`}
+              placeholder="Password"
+            />
+            <button type="submit" className="w-full bg-blue-600 text-white font-bold py-4 rounded-xl shadow-md hover:bg-blue-700 hover:-translate-y-0.5 transition-all active:translate-y-0 text-sm tracking-wide">Enter Prototype</button>
+          </form>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#F5F5F7] text-gray-900 font-sans flex flex-col items-center justify-center p-4 md:p-6 selection:bg-blue-100">
