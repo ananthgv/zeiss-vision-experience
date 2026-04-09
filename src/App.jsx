@@ -55,7 +55,8 @@ const COATINGS = [
 
 // --- Main Application Component ---
 export default function App() {
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(-1);
+  const [dealerType, setDealerType] = useState(null);
 
   // Data States
   const [patient, setPatient] = useState({ name: '', phone: '', email: '', dob: '', country: '', pincode: '' });
@@ -219,7 +220,7 @@ export default function App() {
                 </div>
               </div>
             )}
-            {step > 0 && (
+            {step > -1 && (
               <button onClick={() => setStep(step - 1)} className="text-sm font-medium text-gray-400 hover:text-gray-800 transition-colors bg-gray-50 px-4 py-2 rounded-full">Back</button>
             )}
           </div>
@@ -227,11 +228,40 @@ export default function App() {
 
         <div className="flex-1 overflow-y-auto bg-gray-50/30 flex flex-col items-center p-6 md:p-10 relative">
 
+          {/* STEP -1: Dealer Selection */}
+          {step === -1 && (
+            <div className="animate-fade-in max-w-5xl w-full mx-auto mt-4">
+              <div className="text-center mb-12">
+                <h1 className="text-3xl font-light tracking-tight text-gray-900 mb-3">Select Your Store Identity</h1>
+                <p className="text-gray-500 text-sm">To provide a personalized experience, please identify your ZEISS dealership level.</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {[
+                  { id: 'ZEISS Vision Center', title: 'ZEISS Vision Center', desc: 'Flagship pure stores designed with ZEISS. Features the full suite of diagnostic equipment (VISUCORE 500, VISUFIT 1000) for a premium, data-driven consultation.', icon: '🏢' },
+                  { id: 'ZEISS Vision Expert', title: 'ZEISS Vision Expert', desc: 'Elite independent practices offering the same precision as a Vision Center, with investments in high-end diagnostic machines and ZEISS optical fingerprinting.', icon: '🏆' },
+                  { id: 'ZEISS Vision Partner', title: 'ZEISS Vision Partner', desc: 'Authorized optical stores dispensing ZEISS lenses. Trained to provide high-quality solutions, even without automated 3D centration devices.', icon: '🤝' }
+                ].map((dealer) => (
+                  <div 
+                    key={dealer.id}
+                    onClick={() => { setDealerType(dealer.title); setStep(0); }}
+                    className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-200 transition-all duration-300 cursor-pointer flex flex-col h-full group"
+                  >
+                    <div className="text-4xl mb-6 bg-gray-50 w-16 h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">{dealer.icon}</div>
+                    <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">{dealer.title}</h3>
+                    <p className="text-sm text-gray-500 leading-relaxed flex-1">{dealer.desc}</p>
+                    <div className="mt-8 text-blue-600 font-semibold text-sm group-hover:translate-x-2 transition-transform flex items-center gap-1">Continue <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg></div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* STEP 0: Onboarding */}
           {step === 0 && (
             <div className="animate-fade-in max-w-lg w-full text-center mt-8">
               <UserIcon />
-              <h1 className="text-3xl font-light tracking-tight text-gray-900 mb-2">Welcome to Zeiss Vision Centre</h1>
+              <h1 className="text-3xl font-light tracking-tight text-gray-900 mb-2">Welcome to {dealerType || 'Zeiss Vision Centre'}</h1>
               <p className="text-gray-500 mb-8 text-sm">Please enter details to begin your personalized vision journey.</p>
               
               <div className="bg-white p-2 rounded-2xl shadow-sm border border-gray-100 flex gap-2 mb-8 mx-auto w-fit">
